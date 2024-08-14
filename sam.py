@@ -34,13 +34,22 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
         
         with gr.Column(scale=2):
             gr.Markdown("## Image Quality Assessment")
+
+            trcnn_quality = gr.State(0)
+            cnniqa_quality = gr.State(0)
+            hiqa_quality = gr.State(0)
+
+            trcnn_output = gr.Number(label="TrCNN Score")
+            cnniqa_output = gr.Number(label="CNNIQA Score")
+            hiqa_output = gr.Number(label="HIQA Score")
            
             with gr.Row():
+
                 with gr.Column(scale=1):
                     upload_box = gr.Image(label="Upload Image", type="pil", height=420, width=500)
                     with gr.Row():
                         upload_button = gr.Button("Upload")
-                        check_upload_quality_button = gr.Button("Check Quality")
+                        check_upload_quality_button = gr.Button("Check Quality", lambda trcnn_quality: trcnn_quality + 10, trcnn_quality, trcnn_output)
                     upload_quality_dropdown = gr.Dropdown(
                         choices=["CNNIQA", "HIQA", "Prompt Similarity", "Our Model"],
                         label="Select Quality Check Method",
@@ -59,7 +68,6 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
                     )
             
            
-            graph_output = gr.Plot(label="Analysis Graph")
 
     def update_chat(chatbox, message):
         chatbox.append(("User", message))
